@@ -1,0 +1,12 @@
+# ENV files (never push)
+**/.env
+**/.env.*
+
+# Frontend
+node_modules/
+dist/
+
+# Backend
+target/
+*.log
+.idea/
