@@ -1,0 +1,23 @@
+package com.mauryaalok.HotelDelhi.repo;
+
+import com.mauryaalok.HotelDelhi.entity.Room;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.time.LocalDate;
+import java.util.List;
+
+public interface RoomRepository extends JpaRepository<Room, Long> {
+
+    @Query("SELECT DISTINCT r.roomType FROM Room  r")
+    List<String> findByDistinctRoomTypes();
+
+    @Query("SELECT r FROM Room r where r.roomType like  %:roomType% AND  r.id NOT  in (select bk.room.id from Booking bk where" +
+            " (bk.checkInDate <= :checkOutDate) AND (bk.checkOutDate >= :checkInDate))")
+    List<Room> findAvailableRoomsByDateAndTypes(LocalDate checkInDate, LocalDate checkOutDate, String roomType);
+
+
+    @Query("SELECT r FROM Room r WHERE r.id NOT IN (SELECT b.room.id FROM Booking b)")
+    List<Room> getAllAvailableRooms();
+
+}
